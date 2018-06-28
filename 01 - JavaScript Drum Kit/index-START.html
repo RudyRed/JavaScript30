@@ -60,8 +60,17 @@
 <script>
 
   const playSound = function (e) {
-    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+    let audio;
+    let key;
+
+    if (e.type === 'keydown') {
+      audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    } else if (e.type === 'click') {
+      audio = document.querySelector(`audio[data-key="${this.dataset.key}"]`);
+      key = this;
+    }
 
     if (audio) {
       audio.currentTime = 0;
@@ -80,6 +89,7 @@
   const keys = document.querySelectorAll('.key');
   keys.forEach(key => {
     key.addEventListener('transitionend', removeTransition);
+    key.addEventListener('click', playSound);
   });
   window.addEventListener('keydown', playSound);
 
